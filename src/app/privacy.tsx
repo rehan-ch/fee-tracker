@@ -1,7 +1,7 @@
 /** In-app privacy policy (Google Play requires one inside apps that handle personal data). */
 import { Alert, Linking, StyleSheet, View } from 'react-native';
 
-import { mailtoUrl } from '../components/settings/links';
+import { mailtoUrl, safeHttpsUrl } from '../components/settings/links';
 import { Button, Card, Screen, Txt } from '../components/ui';
 import { cloudConfigured, PUBLISHER } from '../config';
 import { useApp } from '../state/app';
@@ -96,13 +96,16 @@ const ltrAlign = { textAlign: 'left' } as const;
 
 /** Built once from the publisher address; null (no button) if it isn't a plain email. */
 const CONTACT_MAILTO = mailtoUrl(PUBLISHER.contactEmail);
+/** The same policy on the web (Play requires a public URL; this links it from inside the app). */
+const POLICY_URL = safeHttpsUrl(PUBLISHER.privacyPolicyUrl);
 
 export default function PrivacyScreen() {
   const { lang, t } = useApp();
-  const contact = () => {
-    if (!CONTACT_MAILTO) return;
-    Linking.openURL(CONTACT_MAILTO).catch(() => Alert.alert(t('somethingWrong')));
+  const open = (url: string | null) => {
+    if (!url) return;
+    Linking.openURL(url).catch(() => Alert.alert(t('somethingWrong')));
   };
+  const contact = () => open(CONTACT_MAILTO);
   return (
     <Screen>
       <View style={styles.column}>
@@ -132,15 +135,26 @@ export default function PrivacyScreen() {
             </View>
           ))}
         </Card>
-        {CONTACT_MAILTO ? (
+        {CONTACT_MAILTO || POLICY_URL ? (
           <View style={styles.gapSm}>
-            <Button
-              title={t('settingsContactUs')}
-              icon="mail-outline"
-              variant="tonal"
-              accessibilityHint={PUBLISHER.contactEmail}
-              onPress={contact}
-            />
+            {POLICY_URL ? (
+              <Button
+                title={t('settingsPrivacyOnline')}
+                icon="globe-outline"
+                variant="tonal"
+                accessibilityHint={POLICY_URL}
+                onPress={() => open(POLICY_URL)}
+              />
+            ) : null}
+            {CONTACT_MAILTO ? (
+              <Button
+                title={t('settingsContactUs')}
+                icon="mail-outline"
+                variant="tonal"
+                accessibilityHint={PUBLISHER.contactEmail}
+                onPress={contact}
+              />
+            ) : null}
             <Txt variant="small" ltr center selectable>
               {PUBLISHER.contactEmail}
             </Txt>

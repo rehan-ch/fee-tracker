@@ -10,7 +10,7 @@ Console as you go; the answers below describe what the app actually does.
 | --- | --- |
 | Target API level | Expo SDK 58 builds with `targetSdk 36` (Android 16), `minSdk 24`. |
 | 64-bit and 16 KB page size | Expo SDK 58 / React Native 0.88 native libraries support both. |
-| Minimal permissions | `INTERNET`, `VIBRATE`, `POST_NOTIFICATIONS` (asked for only when you turn on alerts), `RECEIVE_BOOT_COMPLETED` (to restore scheduled alerts after a restart). No billing permission: Google Play Billing is not in this build. Storage, media, audio and overlay permissions pulled in by libraries are removed via `android.blockedPermissions`. **No SMS, call log, contacts, location, camera or exact-alarm permissions**: reminders open WhatsApp or the SMS app for you to send, so the SMS permission policy doesn't apply. |
+| Minimal permissions | Declared in the built bundle (checked 17 Nov 2026): `INTERNET`, `ACCESS_NETWORK_STATE`, `VIBRATE`, `WAKE_LOCK`, `POST_NOTIFICATIONS` (asked for only when you turn on alerts), `RECEIVE_BOOT_COMPLETED` (to restore scheduled alerts after a restart), `USE_BIOMETRIC` / `USE_FINGERPRINT` (from the secure-store library; the app never prompts for them), plus the notification library's launcher-badge and `c2dm` entries. All of these are normal permissions with no Play declaration form. Storage, media, audio and overlay permissions pulled in by libraries are removed via `android.blockedPermissions`. No billing permission: Google Play Billing is not in this build. **No SMS, call log, contacts, location, camera or exact-alarm permissions**: reminders open WhatsApp or the SMS app for you to send, so the SMS permission policy doesn't apply. |
 | Privacy policy inside the app | Settings → Privacy policy (`src/app/privacy.tsx`), also linked from the first-launch screen. The cloud section only shows when cloud sync is built in. |
 | User data deletion | Delete a customer, a business, or everything on the phone (deleting clears names, phone numbers, addresses and notes, on the phone and in the cloud). With cloud sync: in-app **Delete cloud account** (Settings → Cloud sync) plus a web page you publish (`PUBLISHER.accountDeletionUrl`). |
 | Security | See `SECURITY.md`: parameterized SQL, validated backups and sync data, escaped receipts/reports, checked links, salted PIN hashes, encrypted sign-in storage, row-level security on the server. |
@@ -126,7 +126,7 @@ says the app provides none of the listed financial services.
 
 ## Store listing
 
-**App name** (≤ 30 chars): `Fee Tracker: Monthly Collection`
+**App name** (≤ 30 chars): `Fee Tracker: Collection Book` (28 characters)
 
 **Short description** (≤ 80 chars):
 `Track monthly fees, send WhatsApp reminders and see who paid at a glance.`
@@ -150,7 +150,7 @@ and water delivery, and committee collections all use the same simple flow.
 • Monthly and yearly reports, exported to PDF or Excel
 • Alerts like "15 customers still unpaid this month"
 • English and Urdu
-• Works fully offline; back up to Google Drive and restore on any phone
+• Works fully offline; save a backup file (for example to Google Drive) and restore on any phone
 
 Also included: staff accounts with roles, several businesses, a reminder schedule, and
 your payment details in reminders and receipts.
@@ -165,10 +165,49 @@ them and does not process payments.
 Remove the "cloud sync" phrases if you ship without it.
 
 **Graphics** (in `docs/store/`):
-- `play-icon-512.png`: 512×512 app icon
-- `feature-graphic-1024x500.png`: feature graphic
-- **Phone screenshots: you still need at least 2** (up to 8), 9:16, e.g. 1080×1920.
-  Take them from the preview APK with realistic sample data (no real customer details).
+- `play-icon-512.png`: 512×512 app icon, 32-bit PNG with alpha, no text or badges
+- `feature-graphic-1024x500.png`: feature graphic, 1024×500, 24-bit PNG without alpha
+- **Phone screenshots: you still need at least 2** (Google recommends 4 or more), 9:16,
+  1080×1920, JPEG or 24-bit PNG without alpha. Install the internal-testing build on a
+  phone, load `docs/store/sample-backup.json` through Settings → Restore backup, and take
+  screenshots of Home, the Unpaid list, a customer page and Reports. No real customer
+  details.
 
 **Category:** Business. **Contact email:** `nexondev.ai@gmail.com`.
 **Privacy policy URL:** https://rehan-ch.github.io/fee-tracker/privacy-policy.html
+
+## Verified against "Google Play Publishing Requirements and Terms" (17 November 2026)
+
+Checked on the first production bundle (`fee-tracker-1.0.0-vc2.aab`, EAS build
+`d3ed5c35`). Sections 1, 2, 6, 8 and 9 of that document are account and process steps for
+the publisher; the app-side items are below.
+
+| Requirement | Status | Evidence |
+| --- | --- | --- |
+| Android App Bundle | Done | `eas.json` production profile builds `app-bundle`. |
+| Target API 36 | Done | Bundle manifest: `minSdkVersion` 24, `targetSdkVersion` 36, `compileSdkVersion` 37. |
+| Play App Signing | At upload | Upload keystore generated and stored on EAS; accept Play App Signing on the first release. |
+| Permanent package name | Done | `com.feetracker.app`, confirmed. |
+| Version code increases | Done | `appVersionSource: remote` + `autoIncrement`; first build is versionCode 2. |
+| 16 KB page size | Done | All 26 arm64 `.so` files in the bundle have 16 KB (`0x4000`) LOAD alignment. |
+| Download size | Done | Bundle is 72 MB; Play serves per-device splits, well inside the limit. |
+| App name ≤ 30 | Done | `Fee Tracker: Collection Book` (28). |
+| Short description ≤ 80 | Done | 73 characters. |
+| Full description ≤ 4,000 | Done | About 1,400 characters, no keyword stuffing. |
+| Icon 512×512, 32-bit PNG with alpha, ≤ 1 MB, no badges | Done | `docs/store/play-icon-512.png` (RGBA, 4 KB). |
+| Feature graphic 1024×500, no alpha | Done | `docs/store/feature-graphic-1024x500.png` (RGB, 16 KB). |
+| At least 2 phone screenshots | **To do** | Take from the installed internal-testing build (see Graphics above). |
+| Support email | Done | `nexondev.ai@gmail.com`. |
+| Privacy policy: public web page, not a PDF, linked in the app | Done | https://rehan-ch.github.io/fee-tracker/privacy-policy.html; in-app under Settings → Privacy policy with a "Read online" button. |
+| Data safety form | Answers ready | See "Play Console forms" above; offline build collects nothing. |
+| Account deletion in app and on the web | Done | Settings → Cloud sync → Delete cloud account (when cloud sync is built in); https://rehan-ch.github.io/fee-tracker/delete-account.html. No accounts in the offline build. |
+| Ads | None | No ad SDK. |
+| App access | No login | Nothing needs credentials in the offline build. |
+| Target audience / content rating | Answers ready | 18+, Everyone. |
+| High-risk permissions | None | No SMS, call log, location, camera, microphone, all-files or exact-alarm permissions in the bundle. |
+| Restricted content, impersonation, IP | Compliant | Original icon and graphics; Inter and Noto Nastaliq Urdu fonts (OFL); Ionicons (MIT); JazzCash / Easypaisa named only as payment methods with a disclaimer. |
+| Privacy and user data | Compliant | Records stay on the phone; no analytics or tracking SDKs; policy explains every data flow. |
+| Deceptive behaviour / minimum functionality | Compliant | Listing describes the shipped features; 98 automated tests, lint and typecheck pass. |
+| Payments policy | N/A | No digital goods; the app only records payments made outside it. |
+| Special app types (finance, loans, health, news…) | N/A | Record-keeping tool; declare "none" in the financial features form. |
+| Third-party SDKs | Reviewed | Expo modules, React Native, SQLite, fflate; Supabase only when cloud keys are set. |

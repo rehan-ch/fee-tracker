@@ -45,6 +45,7 @@ export const en = {
   settingsAlertTimeA11y: 'Alert time {time}. Tap to change.',
   settingsPremiumChipA11y: 'Premium feature.',
   settingsContactUs: 'Email us',
+  settingsPrivacyOnline: 'Read online',
   settingsLoading: 'Loading…',
   settingsInviteCodeA11y: 'Invite code: {code}',
 } satisfies Record<string, string>;
@@ -83,6 +84,7 @@ export const ur: Record<keyof typeof en, string> = {
   settingsAlertTimeA11y: 'اطلاع کا وقت {time}۔ بدلنے کے لیے ٹیپ کریں۔',
   settingsPremiumChipA11y: 'پریمیم فیچر۔',
   settingsContactUs: 'ہمیں ای میل کریں',
+  settingsPrivacyOnline: 'آن لائن پڑھیں',
   settingsLoading: 'لوڈ ہو رہا ہے…',
   settingsInviteCodeA11y: 'دعوتی کوڈ: {code}',
 };
