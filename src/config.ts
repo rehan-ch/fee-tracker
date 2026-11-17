@@ -9,7 +9,7 @@ import { isAllowedCloudUrl, isSecretSupabaseKey } from './lib/cloudKeys';
  */
 export const PUBLISHER = {
   developerName: 'Rehan Ch',
-  contactEmail: 'nexondev.ai@gmail.com',
+  contactEmail: 'rehanch642@gmail.com',
   policyLastUpdated: '17 November 2026',
   /** Public privacy policy page (Play Console → Store listing). */
   privacyPolicyUrl: 'https://rehan-ch.github.io/fee-tracker/privacy-policy.html',

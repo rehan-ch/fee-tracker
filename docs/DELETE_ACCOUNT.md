@@ -34,7 +34,7 @@ stay with their owner; only your membership is removed.
 ### Request deletion by email
 
 If you no longer have the app installed, email
-[nexondev.ai@gmail.com](mailto:nexondev.ai@gmail.com?subject=Fee%20Tracker%20account%20deletion)
+[rehanch642@gmail.com](mailto:rehanch642@gmail.com?subject=Fee%20Tracker%20account%20deletion)
 from the address you signed in with, with the subject "Fee Tracker account deletion". We
 delete the account and its data within 7 days and confirm by email. We do not keep any of
 it afterwards; our hosting provider's backups may hold a copy for a short time until they

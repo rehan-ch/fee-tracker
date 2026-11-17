@@ -173,7 +173,7 @@ Remove the "cloud sync" phrases if you ship without it.
   screenshots of Home, the Unpaid list, a customer page and Reports. No real customer
   details.
 
-**Category:** Business. **Contact email:** `nexondev.ai@gmail.com`.
+**Category:** Business. **Contact email:** `rehanch642@gmail.com`.
 **Privacy policy URL:** https://rehan-ch.github.io/fee-tracker/privacy-policy.html
 
 ## Verified against "Google Play Publishing Requirements and Terms" (17 November 2026)
@@ -197,7 +197,7 @@ the publisher; the app-side items are below.
 | Icon 512×512, 32-bit PNG with alpha, ≤ 1 MB, no badges | Done | `docs/store/play-icon-512.png` (RGBA, 4 KB). |
 | Feature graphic 1024×500, no alpha | Done | `docs/store/feature-graphic-1024x500.png` (RGB, 16 KB). |
 | At least 2 phone screenshots | **To do** | Take from the installed internal-testing build (see Graphics above). |
-| Support email | Done | `nexondev.ai@gmail.com`. |
+| Support email | Done | `rehanch642@gmail.com`. |
 | Privacy policy: public web page, not a PDF, linked in the app | Done | https://rehan-ch.github.io/fee-tracker/privacy-policy.html; in-app under Settings → Privacy policy with a "Read online" button. |
 | Data safety form | Answers ready | See "Play Console forms" above; offline build collects nothing. |
 | Account deletion in app and on the web | Done | Settings → Cloud sync → Delete cloud account (when cloud sync is built in); https://rehan-ch.github.io/fee-tracker/delete-account.html. No accounts in the offline build. |

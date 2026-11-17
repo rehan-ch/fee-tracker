@@ -92,7 +92,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 `;
 
 const nav = `<nav><a href="./">Fee Tracker</a><a href="privacy-policy.html">Privacy policy</a><a href="delete-account.html">Delete account</a></nav>`;
-const footer = `<footer>Fee Tracker is published by Rehan Ch · <a href="mailto:nexondev.ai@gmail.com">nexondev.ai@gmail.com</a></footer>`;
+const footer = `<footer>Fee Tracker is published by Rehan Ch · <a href="mailto:rehanch642@gmail.com">rehanch642@gmail.com</a></footer>`;
 
 for (const { src, out } of PAGES) {
   const { title, body } = render(readFileSync(src, 'utf8'));

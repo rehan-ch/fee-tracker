@@ -93,6 +93,6 @@ with a new date.
 
 ## Contact
 
-Rehan Ch – [nexondev.ai@gmail.com](mailto:nexondev.ai@gmail.com)
+Rehan Ch – [rehanch642@gmail.com](mailto:rehanch642@gmail.com)
 
 This policy is also shown inside the app under **Settings → Privacy policy**.
