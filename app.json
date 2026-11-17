@@ -9,7 +9,10 @@
     "userInterfaceStyle": "light",
     "backgroundColor": "#F4F6F8",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "ExpoLocalization_supportsRTL": false
+      }
     },
     "android": {
       "package": "com.feetracker.app",
@@ -67,6 +70,18 @@
         }
       ],
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "supportsRTL": false,
+      "eas": {
+        "projectId": "72b46180-2a51-4c56-875a-977c2312b8a8"
+      }
+    },
+    "owner": "rehanchh"
   }
 }

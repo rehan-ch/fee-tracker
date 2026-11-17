@@ -22,9 +22,8 @@ Console as you go; the answers below describe what the app actually does.
 
 ## Before your first build
 
-1. **Choose the package name.** `app.json` → `android.package` is currently
-   `com.feetracker.app`, a placeholder. Use something you own, such as
-   `com.yourbusiness.feetracker`. **It can never be changed after the first upload.**
+1. **Package name:** `com.feetracker.app` (`app.json` → `android.package`), decided on
+   17 November 2026. **It can never be changed after the first upload.**
 2. **Publisher details** are filled in (`src/config.ts` → `PUBLISHER`, `docs/PRIVACY_POLICY.md`,
    `docs/DELETE_ACCOUNT.md`). If the contact email changes, update all three and run
    `node scripts/build-pages.mjs`.
