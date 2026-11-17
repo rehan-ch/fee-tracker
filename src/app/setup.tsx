@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { BrandMark } from '../components/core/BrandMark';
 import { IconCircle } from '../components/core/IconCircle';
 import { Button, Card, Field, Icon, Row, Screen, Segmented, Txt, type IconName } from '../components/ui';
 import { cloudConfigured } from '../config';
@@ -84,7 +85,7 @@ export default function SetupScreen() {
               importantForAccessibility="no-hide-descendants"
               style={[styles.logo, { backgroundImage: isRTL ? gradients.heroRTL : gradients.hero }]}
             >
-              <Icon name="wallet" size={40} color={colors.onPrimary} />
+              <BrandMark size={48} />
             </View>
             <Txt variant="title" center header>
               {t('coreWelcomeTitle')}

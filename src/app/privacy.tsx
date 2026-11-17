@@ -1,8 +1,9 @@
 /** In-app privacy policy (Google Play requires one inside apps that handle personal data). */
 import { Alert, Linking, StyleSheet, View } from 'react-native';
 
+import { BrandMark } from '../components/core/BrandMark';
 import { mailtoUrl, safeHttpsUrl } from '../components/settings/links';
-import { Button, Card, Screen, Txt } from '../components/ui';
+import { Button, Card, Row, Screen, Txt } from '../components/ui';
 import { cloudConfigured, PUBLISHER } from '../config';
 import { useApp } from '../state/app';
 import { space } from '../theme';
@@ -109,6 +110,12 @@ export default function PrivacyScreen() {
   return (
     <Screen>
       <View style={styles.column}>
+        <Row gap={space.sm} justify="center">
+          <BrandMark size={32} variant="teal" />
+          <Txt variant="h2" header>
+            {t('appName')}
+          </Txt>
+        </Row>
         {lang === 'ur' ? (
           <Card variant="tonal" style={styles.gapSm}>
             <Txt variant="h2" header>

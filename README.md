@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/brand/logo-lockup.png" alt="Fee Tracker" width="480"></p>
+
 # Fee Tracker (Monthly Fee Tracker)
 
 An offline-first Android app for monthly service businesses: add a customer once, record
@@ -221,5 +223,16 @@ src/
 supabase/         server schema, access rules and their tests
 docs/             feature plan, Play Store checklist, privacy policy and delete-account pages
                   (served by GitHub Pages), store graphics
-scripts/          build-pages.mjs: renders docs/*.md into the hosted HTML pages
+scripts/          build-pages.mjs: renders docs/*.md into the hosted HTML pages;
+                  build-brand.mjs: renders every logo asset from one vector mark
 ```
+
+## Brand
+
+The mark is a bold **F** (Fee) whose third line is a **check** (paid): white with a mint
+check on the teal tile, teal on light surfaces. Everything that shows it (app icons,
+adaptive icon layers, splash, notification icon, favicons, Play Store icon and feature
+graphic, website and this README) is generated from one definition by
+`node scripts/build-brand.mjs` (needs Google Chrome for rendering). Vector sources live in
+`assets/brand/`. Change the geometry or colours there, rerun the script, and rebuild the
+app.

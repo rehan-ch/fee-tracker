@@ -88,18 +88,18 @@ h1{font-size:1.75rem;line-height:1.25;margin:0 0 .25rem}h2{font-size:1.2rem;marg
 p{margin:.5rem 0}.meta{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
 ul,ol{padding-inline-start:1.4rem}li{margin:.25rem 0}a{color:var(--accent)}code{background:var(--bg);padding:0 .3em;border-radius:4px}
 table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.95rem}th,td{text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-weight:600}
-nav{font-size:.9rem;margin-bottom:1.5rem}nav a{margin-inline-end:1rem}
+nav{font-size:.9rem;margin-bottom:1.5rem;display:flex;flex-wrap:wrap;align-items:center;gap:1rem}nav .brand{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;text-decoration:none;color:var(--ink)}nav img{border-radius:7px}
 footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
 `;
 
-const nav = `<nav><a href="./">Fee Tracker</a><a href="privacy-policy.html">Privacy policy</a><a href="delete-account.html">Delete account</a><a href="terms-of-service.html">Terms</a></nav>`;
+const nav = `<nav><a href="./" class="brand"><img src="favicon.png" alt="" width="28" height="28">Fee Tracker</a><a href="privacy-policy.html">Privacy policy</a><a href="delete-account.html">Delete account</a><a href="terms-of-service.html">Terms</a></nav>`;
 const footer = `<footer>Fee Tracker is published by Rehan Ch · <a href="mailto:rehanch642@gmail.com">rehanch642@gmail.com</a></footer>`;
 
 for (const { src, out } of PAGES) {
   const { title, body } = render(readFileSync(src, 'utf8'));
   writeFileSync(
     out,
-    `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<title>${esc(title)}</title>\n<style>${CSS}</style>\n</head>\n<body>\n<main>\n${nav}\n${body}\n${footer}\n</main>\n</body>\n</html>\n`,
+    `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<link rel="icon" href="favicon.png">\n<title>${esc(title)}</title>\n<style>${CSS}</style>\n</head>\n<body>\n<main>\n${nav}\n${body}\n${footer}\n</main>\n</body>\n</html>\n`,
   );
   console.log(`${src} -> ${out}`);
 }
