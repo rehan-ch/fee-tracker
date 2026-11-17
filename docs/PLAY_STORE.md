@@ -30,6 +30,7 @@ Console as you go; the answers below describe what the app actually does.
 3. **Privacy policy and account-deletion pages** are served by GitHub Pages from `docs/`:
    - Privacy policy: https://rehan-ch.github.io/fee-tracker/privacy-policy.html
    - Delete account: https://rehan-ch.github.io/fee-tracker/delete-account.html
+   - Terms of service: https://rehan-ch.github.io/fee-tracker/terms-of-service.html
    Edit the `.md` files, run `node scripts/build-pages.mjs`, commit and push.
 4. **Premium** is free for everyone in this release (`PREMIUM.enforce: false`).
 5. **Cloud sync (optional):** follow `supabase/README.md`, then set

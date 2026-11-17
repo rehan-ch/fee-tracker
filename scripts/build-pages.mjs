@@ -5,6 +5,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const PAGES = [
   { src: 'docs/PRIVACY_POLICY.md', out: 'docs/privacy-policy.html' },
   { src: 'docs/DELETE_ACCOUNT.md', out: 'docs/delete-account.html' },
+  { src: 'docs/TERMS_OF_SERVICE.md', out: 'docs/terms-of-service.html' },
 ];
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -91,7 +92,7 @@ nav{font-size:.9rem;margin-bottom:1.5rem}nav a{margin-inline-end:1rem}
 footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
 `;
 
-const nav = `<nav><a href="./">Fee Tracker</a><a href="privacy-policy.html">Privacy policy</a><a href="delete-account.html">Delete account</a></nav>`;
+const nav = `<nav><a href="./">Fee Tracker</a><a href="privacy-policy.html">Privacy policy</a><a href="delete-account.html">Delete account</a><a href="terms-of-service.html">Terms</a></nav>`;
 const footer = `<footer>Fee Tracker is published by Rehan Ch · <a href="mailto:rehanch642@gmail.com">rehanch642@gmail.com</a></footer>`;
 
 for (const { src, out } of PAGES) {
