@@ -55,6 +55,7 @@ Bottom tabs: **Home, Collection, Customers, Reports, Settings**.
 | 11 | Receipt preview (image / PDF) | 2 | `src/app/receipt/[id].tsx` |
 | 12 | Reports (month / year, PDF / Excel) | 2 | `src/app/(tabs)/reports.tsx`, `src/lib/exportReport.ts` |
 | 13 | Fee change + fee history | 2 | `src/app/customer/[id]/fee.tsx` |
+| – | Payment proof screenshots (attach the customer's JazzCash/Easypaisa confirmation) | 2 | `src/lib/proofs.ts`, `src/components/customers/ProofViewer.tsx` |
 | – | Owner alerts | 2 | `src/app/alerts.tsx`, `src/lib/notify.ts` |
 | 14 | Staff management | Premium | `src/app/staff/`, switch user: `src/components/SwitchUserSheet.tsx` |
 | – | Several businesses | Premium | `src/app/businesses.tsx` |

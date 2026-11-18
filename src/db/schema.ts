@@ -4,7 +4,8 @@ export const DATABASE_NAME = 'fee-tracker.db';
 
 /**
  * Schema version written into backups. Bump it together with a new entry in
- * MIGRATIONS whenever the schema changes.
+ * MIGRATIONS whenever the backed-up tables change (local-only tables such as
+ * staff_pins and payment_proofs don't count).
  */
 export const SCHEMA_VERSION = 2;
 
@@ -227,6 +228,15 @@ export const MIGRATIONS: string[] = [
   CREATE INDEX idx_dues_business_month ON monthly_dues(business_id, month);
   CREATE INDEX idx_payments_business ON payments(business_id, paid_on);
   ${syncTriggers()}
+  `,
+
+  // v3: payment proof screenshots. Local only, like PINs: never synced or backed up.
+  `
+  CREATE TABLE payment_proofs (
+    payment_id TEXT PRIMARY KEY NOT NULL REFERENCES payments(id),
+    file TEXT NOT NULL,
+    created_at TEXT NOT NULL
+  );
   `,
 ];
 

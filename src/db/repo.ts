@@ -185,6 +185,10 @@ const scrub = (table: string) => (SCRUB_ON_DELETE[table] ? `, ${SCRUB_ON_DELETE[
 export async function deleteBusiness(db: SQLiteDatabase, id: string): Promise<void> {
   const now = nowIso();
   await writeTx(db, async () => {
+    await db.runAsync(
+      'DELETE FROM payment_proofs WHERE payment_id IN (SELECT id FROM payments WHERE business_id = ?)',
+      id,
+    );
     for (const table of [
       'reminders_log',
       'fee_changes',
@@ -907,6 +911,10 @@ export async function feeThisMonth(db: SQLiteDatabase, customer: Customer): Prom
 export async function deleteCustomer(db: SQLiteDatabase, id: string): Promise<void> {
   const now = nowIso();
   await writeTx(db, async () => {
+    await db.runAsync(
+      'DELETE FROM payment_proofs WHERE payment_id IN (SELECT id FROM payments WHERE customer_id = ?)',
+      id,
+    );
     for (const table of ['reminders_log', 'payments', 'monthly_dues', 'fee_changes']) {
       await db.runAsync(
         `UPDATE ${table} SET deleted_at = ?, updated_at = ?${scrub(table)} WHERE customer_id = ? AND deleted_at IS NULL`,
@@ -1035,12 +1043,15 @@ export type PaymentRow = Payment & {
   month: MonthKey;
   received_by_name: string | null;
   received_by_role: StaffRole | null;
+  /** File name of the attached proof screenshot (see lib/proofs), if any. */
+  proof_file: string | null;
 };
 
-const PAYMENT_ROW = `SELECT p.*, d.month, s.name AS received_by_name, s.role AS received_by_role
+const PAYMENT_ROW = `SELECT p.*, d.month, s.name AS received_by_name, s.role AS received_by_role, pp.file AS proof_file
   FROM payments p
   JOIN monthly_dues d ON d.id = p.monthly_due_id
-  LEFT JOIN staff s ON s.id = p.received_by`;
+  LEFT JOIN staff s ON s.id = p.received_by
+  LEFT JOIN payment_proofs pp ON pp.payment_id = p.id`;
 
 export function customerPayments(db: SQLiteDatabase, customerId: string): Promise<PaymentRow[]> {
   return db.getAllAsync<PaymentRow>(
@@ -1061,12 +1072,13 @@ export type ReceiptData = PaymentRow & {
 
 export function getReceipt(db: SQLiteDatabase, paymentId: string): Promise<ReceiptData | null> {
   return db.getFirstAsync<ReceiptData>(
-    `SELECT p.*, d.month, s.name AS received_by_name, s.role AS received_by_role,
+    `SELECT p.*, d.month, s.name AS received_by_name, s.role AS received_by_role, pp.file AS proof_file,
        c.name AS customer_name, c.phone AS customer_phone, d.total_due, d.paid_amount
      FROM payments p
      JOIN monthly_dues d ON d.id = p.monthly_due_id
      JOIN customers c ON c.id = p.customer_id
      LEFT JOIN staff s ON s.id = p.received_by
+     LEFT JOIN payment_proofs pp ON pp.payment_id = p.id
      WHERE p.id = ? AND p.deleted_at IS NULL`,
     paymentId,
   );
@@ -1119,9 +1131,50 @@ export async function deletePayment(db: SQLiteDatabase, paymentId: string): Prom
       now,
       paymentId,
     );
+    await db.runAsync('DELETE FROM payment_proofs WHERE payment_id = ?', paymentId);
     await refreshDuePaid(db, p.monthly_due_id);
     await recalcCustomer(db, p.customer_id);
   });
+}
+
+// ---------------------------------------------------------------------------
+// Payment proofs (local only: never synced or backed up; files in lib/proofs)
+// ---------------------------------------------------------------------------
+
+/** Link a proof file to a payment. Returns the file it replaced, if any. */
+export async function setPaymentProof(db: SQLiteDatabase, paymentId: string, file: string): Promise<string | null> {
+  return writeTx(db, async () => {
+    const payment = await db.getFirstAsync<{ id: string }>(
+      'SELECT id FROM payments WHERE id = ? AND deleted_at IS NULL',
+      paymentId,
+    );
+    if (!payment) throw new Error('Payment not found');
+    const prev = await db.getFirstAsync<{ file: string }>('SELECT file FROM payment_proofs WHERE payment_id = ?', paymentId);
+    await db.runAsync(
+      `INSERT INTO payment_proofs (payment_id, file, created_at) VALUES (?, ?, ?)
+       ON CONFLICT(payment_id) DO UPDATE SET file = excluded.file, created_at = excluded.created_at`,
+      paymentId,
+      file,
+      nowIso(),
+    );
+    return prev?.file ?? null;
+  });
+}
+
+/** Unlink a payment's proof. Returns the file name so the caller can delete it. */
+export async function clearPaymentProof(db: SQLiteDatabase, paymentId: string): Promise<string | null> {
+  return writeTx(db, async () => {
+    const prev = await db.getFirstAsync<{ file: string }>('SELECT file FROM payment_proofs WHERE payment_id = ?', paymentId);
+    if (!prev) return null;
+    await db.runAsync('DELETE FROM payment_proofs WHERE payment_id = ?', paymentId);
+    return prev.file;
+  });
+}
+
+/** Every proof file still linked to a payment. */
+export async function listProofFiles(db: SQLiteDatabase): Promise<string[]> {
+  const rows = await db.getAllAsync<{ file: string }>('SELECT file FROM payment_proofs');
+  return rows.map((r) => r.file);
 }
 
 // ---------------------------------------------------------------------------
@@ -1319,6 +1372,7 @@ export async function deleteAllData(db: SQLiteDatabase): Promise<void> {
       'customers',
       'staff',
       'staff_pins',
+      'payment_proofs',
       'areas',
       'businesses',
       'sync_outbox',

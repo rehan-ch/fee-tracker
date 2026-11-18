@@ -12,6 +12,7 @@ import { Button, Card, Divider, EmptyState, Field, SectionHeader, Txt } from '..
 import { createBusiness, deleteBusiness, listBusinesses, setActiveBusiness } from '../db/repo';
 import { useQuery } from '../db/useQuery';
 import { isValidPhone } from '../lib/phone';
+import { pruneProofs } from '../lib/proofs';
 import { useApp } from '../state/app';
 import { space } from '../theme';
 
@@ -58,7 +59,11 @@ export default function BusinessesScreen() {
         text: t('delete'),
         style: 'destructive',
         onPress: () => {
-          if (can('businesses.manage')) deleteBusiness(db, id);
+          if (can('businesses.manage')) {
+            deleteBusiness(db, id)
+              .then(() => pruneProofs(db))
+              .catch(() => undefined);
+          }
         },
       },
     ]);

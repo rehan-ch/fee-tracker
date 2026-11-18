@@ -6,12 +6,14 @@
 import { router } from 'expo-router';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useRef, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
 import { addPayment } from '../db/repo';
 import { PAYMENT_METHODS, type MonthlyDue, type PaymentMethod } from '../db/types';
 import type { StringKey } from '../i18n/strings';
 import { todayKey, type DayKey } from '../lib/date';
+import { deleteCacheCopy } from '../lib/exportFiles';
+import { attachProof, pickProofImage, ProofError } from '../lib/proofs';
 import { remainingOf } from '../lib/dues';
 import { parseAmount } from '../lib/money';
 import { useApp } from '../state/app';
@@ -29,6 +31,7 @@ import {
   Divider,
   Field,
   Icon,
+  IconButton,
   Row,
   Txt,
   useCurrencyPrefix,
@@ -78,6 +81,9 @@ function PaymentForm({ due, onClose }: { due: SheetDue; onClose: () => void }) {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [withReceipt, setWithReceipt] = useState(false);
+  // A picked screenshot waits in the cache until the payment is saved.
+  const [proofUri, setProofUri] = useState<string | null>(null);
+  const [proofError, setProofError] = useState<string | null>(null);
   // Blocks a second save from a fast double tap before `saving` re-renders the buttons.
   const busy = useRef(false);
 
@@ -90,6 +96,23 @@ function PaymentForm({ due, onClose }: { due: SheetDue; onClose: () => void }) {
     setAmount(v);
     setError(null);
     setSaveError(null);
+  };
+
+  const pickProof = async () => {
+    setProofError(null);
+    try {
+      const uri = await pickProofImage();
+      if (!uri) return;
+      if (proofUri) deleteCacheCopy(proofUri);
+      setProofUri(uri);
+    } catch (e) {
+      setProofError(t(e instanceof ProofError && e.kind === 'tooLarge' ? 'customersProofTooLarge' : 'customersProofPickFailed'));
+    }
+  };
+
+  const clearProof = () => {
+    if (proofUri) deleteCacheCopy(proofUri);
+    setProofUri(null);
   };
 
   const save = async (receipt: boolean) => {
@@ -116,6 +139,15 @@ function PaymentForm({ due, onClose }: { due: SheetDue; onClose: () => void }) {
         note: note.trim() || null,
         received_by: staff?.id ?? null,
       });
+      if (proofUri) {
+        try {
+          await attachProof(db, paymentId, proofUri);
+        } catch {
+          // The payment is saved; only the picture is missing.
+          if (__DEV__) console.warn('Attaching the screenshot failed');
+          showToast(t('customersProofPickFailed'), true);
+        }
+      }
       showToast(t('paymentSaved'));
       onClose();
       if (receipt) router.push(`/receipt/${paymentId}`);
@@ -247,6 +279,31 @@ function PaymentForm({ due, onClose }: { due: SheetDue; onClose: () => void }) {
         onChangeText={setNote}
         maxLength={200}
       />
+
+      <View style={styles.group}>
+        <Txt variant="label">{`${t('customersProofLabel')} (${t('optional')})`}</Txt>
+        {proofUri ? (
+          <Row gap={space.md}>
+            <Image source={{ uri: proofUri }} accessibilityLabel={t('customersProofLabel')} style={styles.thumb} />
+            <View style={styles.flex}>
+              <Txt variant="small">{t('customersProofAttached')}</Txt>
+            </View>
+            <IconButton name="trash-outline" label={t('customersProofRemove')} onPress={clearProof} />
+          </Row>
+        ) : (
+          <>
+            <Row>
+              <Chip variant="assist" icon="image-outline" label={t('customersProofAttach')} onPress={pickProof} />
+            </Row>
+            <Txt variant="small">{t('customersProofHint')}</Txt>
+          </>
+        )}
+        {proofError ? (
+          <Txt variant="small" tone="danger">
+            {proofError}
+          </Txt>
+        ) : null}
+      </View>
     </BottomSheet>
   );
 }
@@ -290,5 +347,6 @@ const styles = StyleSheet.create({
   summary: { borderRadius: radius.md, padding: space.md, gap: space.sm },
   carried: { marginTop: space.xxs },
   group: { gap: space.sm },
+  thumb: { width: 56, height: 56, borderRadius: radius.md, backgroundColor: colors.surfaceContainer },
   errorRow: { alignItems: 'flex-start', gap: space.xs },
 });

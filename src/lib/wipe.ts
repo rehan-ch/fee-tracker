@@ -13,10 +13,12 @@ import { cloudConfigured } from '../config';
 import { deleteAllData } from '../db/repo';
 import { signOut } from '../sync/cloud';
 import { clearExportFiles } from './exportFiles';
+import { clearAllProofs } from './proofs';
 
 export async function eraseEverything(db: SQLiteDatabase): Promise<void> {
   await deleteAllData(db);
   clearExportFiles();
+  clearAllProofs();
   try {
     await Notifications.cancelAllScheduledNotificationsAsync();
     await Notifications.dismissAllNotificationsAsync();

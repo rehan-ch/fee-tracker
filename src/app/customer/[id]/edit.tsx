@@ -7,6 +7,7 @@ import { CustomerForm } from '../../../components/CustomerForm';
 import { EmptyState } from '../../../components/ui';
 import { deleteCustomer, getCustomer, updateCustomer } from '../../../db/repo';
 import { useQuery } from '../../../db/useQuery';
+import { pruneProofs } from '../../../lib/proofs';
 import { useApp } from '../../../state/app';
 
 export default function EditCustomerScreen() {
@@ -35,6 +36,7 @@ export default function EditCustomerScreen() {
           // Re-checked here: the role can change while the dialog is open.
           if (!can('customers.edit')) return;
           await deleteCustomer(db, customer.id);
+          await pruneProofs(db);
           router.dismissAll();
         },
       },

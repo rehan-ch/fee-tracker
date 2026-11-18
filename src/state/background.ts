@@ -13,6 +13,7 @@ import { useDataVersion } from '../db/events';
 import { getActiveBusiness, getBusinessById, setActiveBusiness } from '../db/repo';
 import { notificationTarget } from '../lib/deepLinks';
 import { configureNotifications, rescheduleAlerts } from '../lib/notify';
+import { pruneProofs } from '../lib/proofs';
 import { linkedBusinesses, pendingChanges } from '../sync/engine';
 import { runSync } from '../sync/runner';
 import { useApp } from './app';
@@ -24,6 +25,11 @@ export function useBackgroundWork() {
   const version = useDataVersion();
   const { t, money, monthLabel, premium, lang, business, can, ready } = useApp();
   const premiumActive = premium.active;
+
+  // Proof screenshots whose payment, customer or business was deleted.
+  useEffect(() => {
+    pruneProofs(db).catch(() => undefined);
+  }, [db]);
 
   // --- Cloud sync: on open, on resume, every few minutes, and after local edits.
   useEffect(() => {

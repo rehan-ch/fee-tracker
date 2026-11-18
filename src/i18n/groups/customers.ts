@@ -50,6 +50,18 @@ export const en = {
   customersAreaExists: 'An area with this name already exists',
   customersOneCustomer: '1 customer',
   customersNoAreasBody: 'Add your first area above, for example Block A.',
+
+  // Payment proof screenshots
+  customersProofLabel: 'Payment screenshot',
+  customersProofAttach: 'Attach screenshot',
+  customersProofAttached: 'Screenshot attached',
+  customersProofHint: 'For example the JazzCash or Easypaisa confirmation the customer sent you.',
+  customersProofView: 'View screenshot',
+  customersProofRemove: 'Remove screenshot',
+  customersProofRemoveConfirm: 'Remove this screenshot? The payment itself stays.',
+  customersProofSaved: 'Screenshot saved',
+  customersProofPickFailed: 'Could not open that image.',
+  customersProofTooLarge: 'That image is too large (15 MB at most).',
 } satisfies Record<string, string>;
 
 export const ur: Record<keyof typeof en, string> = {
@@ -86,4 +98,16 @@ export const ur: Record<keyof typeof en, string> = {
   customersAreaExists: 'اس نام کا علاقہ پہلے سے موجود ہے',
   customersOneCustomer: '1 گاہک',
   customersNoAreasBody: 'اوپر اپنا پہلا علاقہ شامل کریں، مثلاً بلاک اے۔',
+
+  // Payment proof screenshots
+  customersProofLabel: 'ادائیگی کا اسکرین شاٹ',
+  customersProofAttach: 'اسکرین شاٹ لگائیں',
+  customersProofAttached: 'اسکرین شاٹ لگ گیا',
+  customersProofHint: 'مثلاً جاز کیش یا ایزی پیسہ کی وہ رسید جو گاہک نے آپ کو بھیجی۔',
+  customersProofView: 'اسکرین شاٹ دیکھیں',
+  customersProofRemove: 'اسکرین شاٹ ہٹائیں',
+  customersProofRemoveConfirm: 'یہ اسکرین شاٹ ہٹائیں؟ ادائیگی خود برقرار رہے گی۔',
+  customersProofSaved: 'اسکرین شاٹ محفوظ ہو گیا',
+  customersProofPickFailed: 'یہ تصویر نہیں کھل سکی۔',
+  customersProofTooLarge: 'یہ تصویر بہت بڑی ہے (زیادہ سے زیادہ 15 MB)۔',
 };

@@ -28,19 +28,14 @@ import {
   SectionHeader,
   Txt,
 } from '../../../components/ui';
-import {
-  customerDues,
-  customerPayments,
-  deletePayment,
-  feeHistory,
-  getCustomer,
-  type PaymentRow,
-} from '../../../db/repo';
+import { customerDues, customerPayments, feeHistory, getCustomer, type PaymentRow } from '../../../db/repo';
 import type { MonthlyDue } from '../../../db/types';
 import { useQuery } from '../../../db/useQuery';
 import type { StringKey } from '../../../i18n/strings';
 import { currentMonthKey, monthOfDay } from '../../../lib/date';
 import { creditOf, remainingOf } from '../../../lib/dues';
+import { attachProof, deletePaymentWithProof, pickProofImage, ProofError, removeProof } from '../../../lib/proofs';
+import { showToast } from '../../../lib/toast';
 import { useApp } from '../../../state/app';
 import { advanceColors, colors, space, statusColors } from '../../../theme';
 
@@ -76,12 +71,46 @@ export default function CustomerDetailScreen() {
           style: 'destructive',
           // Re-checked here: the role can change while the dialog is open.
           onPress: () => {
-            if (can('payments.delete')) deletePayment(db, p.id);
+            if (can('payments.delete')) deletePaymentWithProof(db, p.id).catch(() => undefined);
           },
         },
       ]);
     },
     [can, canDeletePayment, db, ltr, money, t],
+  );
+
+  /** Pick an image from the phone and attach it to a recorded payment. */
+  const attachProofTo = useCallback(
+    async (p: PaymentRow) => {
+      if (!can('payments.add')) return;
+      try {
+        const uri = await pickProofImage();
+        if (!uri) return;
+        await attachProof(db, p.id, uri);
+        showToast(t('customersProofSaved'));
+      } catch (e) {
+        // Never log the error object: it can hold the file path.
+        showToast(t(e instanceof ProofError && e.kind === 'tooLarge' ? 'customersProofTooLarge' : 'customersProofPickFailed'), true);
+      }
+    },
+    [can, db, t],
+  );
+
+  const confirmRemoveProof = useCallback(
+    (p: PaymentRow) => {
+      if (!can('payments.add')) return;
+      Alert.alert(t('customersProofRemove'), t('customersProofRemoveConfirm'), [
+        { text: t('cancel'), style: 'cancel' },
+        {
+          text: t('delete'),
+          style: 'destructive',
+          onPress: () => {
+            if (can('payments.add')) removeProof(db, p.id).catch(() => undefined);
+          },
+        },
+      ]);
+    },
+    [can, db, t],
   );
 
   if (loading && !customer) return null;
@@ -308,7 +337,12 @@ export default function CustomerDetailScreen() {
             payments.map((p, i) => (
               <Fragment key={p.id}>
                 {i > 0 ? <Divider inset={space.xxxl + space.xs} /> : null}
-                <PaymentItem payment={p} onDelete={canDeletePayment ? confirmDeletePayment : undefined} />
+                <PaymentItem
+                  payment={p}
+                  onDelete={canDeletePayment ? confirmDeletePayment : undefined}
+                  onAttachProof={canAddPayment ? attachProofTo : undefined}
+                  onRemoveProof={canAddPayment ? confirmRemoveProof : undefined}
+                />
               </Fragment>
             ))
           ) : (

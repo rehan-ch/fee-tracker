@@ -15,7 +15,10 @@ Your business name and phone number; for each customer: name, phone number, addr
 area, notes, monthly fee, fee changes and payment records (amount, date, method, who
 received it and a note); staff names, phone numbers and roles; your reminder message and
 payment details. This is saved in the app's private storage on your phone and is used only
-to show your collection lists, balances, reminders, receipts and reports.
+to show your collection lists, balances, reminders, receipts and reports. If you attach a payment screenshot to a payment (for example the JazzCash or Easypaisa
+confirmation a customer sent you), the image is also stored in the app's private storage
+on your phone; it is not included in backup files or cloud sync, and it is deleted with the
+payment.
 
 ## Staff PINs
 

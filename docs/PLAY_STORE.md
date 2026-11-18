@@ -144,6 +144,7 @@ and water delivery, and committee collections all use the same simple flow.
 • Mark paid in one tap, with amount and date filled in
 • Partial payments, with the remaining balance carried to next month
 • Record the method: cash, JazzCash, Easypaisa or bank transfer
+• Attach the customer's JazzCash or Easypaisa screenshot to a payment
 • Paid, Unpaid and Partial lists for any month, by area or batch
 • WhatsApp reminders to everyone unpaid, with name and amount filled in
 • Receipts as an image or PDF, ready to share on WhatsApp
