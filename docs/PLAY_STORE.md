@@ -178,10 +178,10 @@ Remove the "cloud sync" phrases if you ship without it.
 **Category:** Business. **Contact email:** `rehanch642@gmail.com`.
 **Privacy policy URL:** https://rehan-ch.github.io/fee-tracker/privacy-policy.html
 
-## Verified against "Google Play Publishing Requirements and Terms" (17 November 2026)
+## Verified against "Google Play Publishing Requirements and Terms" (re-checked 18 November 2026)
 
-Checked on the first production bundle (`fee-tracker-1.0.0-vc2.aab`, EAS build
-`d3ed5c35`). Sections 1, 2, 6, 8 and 9 of that document are account and process steps for
+Checked on the bundle in internal testing (`fee-tracker-1.0.0-vc7.aab`, EAS build
+`cf4158b7`, release 7 with the brand mark and payment-proof screenshots). Sections 1, 2, 6, 8 and 9 of that document are account and process steps for
 the publisher; the app-side items are below.
 
 | Requirement | Status | Evidence |
@@ -190,26 +190,36 @@ the publisher; the app-side items are below.
 | Target API 36 | Done | Bundle manifest: `minSdkVersion` 24, `targetSdkVersion` 36, `compileSdkVersion` 37. |
 | Play App Signing | At upload | Upload keystore generated and stored on EAS; accept Play App Signing on the first release. |
 | Permanent package name | Done | `com.feetracker.app`, confirmed. |
-| Version code increases | Done | `appVersionSource: remote` + `autoIncrement`; first build is versionCode 2. |
-| 16 KB page size | Done | All 26 arm64 `.so` files in the bundle have 16 KB (`0x4000`) LOAD alignment. |
-| Download size | Done | Bundle is 72 MB; Play serves per-device splits, well inside the limit. |
+| Version code increases | Done | `appVersionSource: remote` + `autoIncrement`; internal releases 2, 3 and 7 (4–6 were lost to failed uploads, which Play does not mind). |
+| 16 KB page size | Done | All 26 arm64 `.so` files in bundle 7 have 16 KB (`0x4000`) LOAD alignment. |
+| Download size | Done | Bundle is 68 MB; Play reports a 16.9 MB download per device. |
 | App name ≤ 30 | Done | `Fee Tracker: Collection Book` (28). |
 | Short description ≤ 80 | Done | 73 characters. |
-| Full description ≤ 4,000 | Done | About 1,400 characters, no keyword stuffing. |
+| Full description ≤ 4,000 | Done | 1,462 characters, no keyword stuffing; lists the payment-screenshot feature that release 7 ships. |
 | Icon 512×512, 32-bit PNG with alpha, ≤ 1 MB, no badges | Done | `docs/store/play-icon-512.png` (RGBA, 4 KB). |
 | Feature graphic 1024×500, no alpha | Done | `docs/store/feature-graphic-1024x500.png` (RGB, 16 KB). |
-| At least 2 phone screenshots | **To do** | Take from the installed internal-testing build (see Graphics above). |
+| At least 2 phone screenshots | **To do** | The only listing item left. Take from the installed release 7 (see Graphics above); then submit the listing for review. |
 | Support email | Done | `rehanch642@gmail.com`. |
 | Privacy policy: public web page, not a PDF, linked in the app | Done | https://rehan-ch.github.io/fee-tracker/privacy-policy.html; in-app under Settings → Privacy policy with a "Read online" button. |
-| Data safety form | Answers ready | See "Play Console forms" above; offline build collects nothing. |
+| Data safety form | Submitted: no collection | Payment-proof screenshots are stored only on the phone (private app storage, never uploaded, not in backups), so "collected" stays No. |
 | Account deletion in app and on the web | Done | Settings → Cloud sync → Delete cloud account (when cloud sync is built in); https://rehan-ch.github.io/fee-tracker/delete-account.html. No accounts in the offline build. |
 | Ads | None | No ad SDK. |
 | App access | No login | Nothing needs credentials in the offline build. |
 | Target audience / content rating | Answers ready | 18+, Everyone. |
-| High-risk permissions | None | No SMS, call log, location, camera, microphone, all-files or exact-alarm permissions in the bundle. |
+| High-risk permissions | None | Bundle 7 declares exactly the same permissions as bundle 2: no SMS, call log, location, camera, microphone, photos/media, all-files or exact-alarm. Screenshots are picked through the system document picker, which needs no permission, so the Photo and Video Permissions policy does not apply. |
 | Restricted content, impersonation, IP | Compliant | Original icon and graphics; Inter and Noto Nastaliq Urdu fonts (OFL); Ionicons (MIT); JazzCash / Easypaisa named only as payment methods with a disclaimer. |
-| Privacy and user data | Compliant | Records stay on the phone; no analytics or tracking SDKs; policy explains every data flow. |
-| Deceptive behaviour / minimum functionality | Compliant | Listing describes the shipped features; 98 automated tests, lint and typecheck pass. |
+| Privacy and user data | Compliant | Records and proof screenshots stay on the phone; no analytics or tracking SDKs; the policy (in-app and hosted) explains every data flow including the screenshots. |
+| Deceptive behaviour / minimum functionality | Compliant | Listing describes the shipped features; 101 automated tests, lint and typecheck pass. |
 | Payments policy | N/A | No digital goods; the app only records payments made outside it. |
 | Special app types (finance, loans, health, news…) | N/A | Record-keeping tool; declare "none" in the financial features form. |
 | Third-party SDKs | Reviewed | Expo modules, React Native, SQLite, fflate; Supabase only when cloud keys are set. |
+
+### Play Console status on 18 November 2026
+
+| Area | State |
+| --- | --- |
+| App | Created, `com.feetracker.app`, Business category, contact email and website set |
+| App content | All 11 declarations actioned; content rating Everyone / PEGI 3; trader status "applies" with the terms URL |
+| Store listing | Text, icon and feature graphic saved as draft; screenshots missing, so not yet submitted for review (the store page shows a temporary name and no icon until it is) |
+| Internal testing | Release 7 (1.0.0) live for the "Internal testers" list; join link `https://play.google.com/apps/internaltest/4701635810876662094` |
+| Closed testing | Not started; needs 12+ testers for 14 days before production access can be requested |
