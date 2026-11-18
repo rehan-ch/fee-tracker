@@ -169,11 +169,10 @@ Remove the "cloud sync" phrases if you ship without it.
 **Graphics** (in `docs/store/`):
 - `play-icon-512.png`: 512×512 app icon, 32-bit PNG with alpha, no text or badges
 - `feature-graphic-1024x500.png`: feature graphic, 1024×500, 24-bit PNG without alpha
-- **Phone screenshots: you still need at least 2** (Google recommends 4 or more), 9:16,
-  1080×1920, JPEG or 24-bit PNG without alpha. Install the internal-testing build on a
-  phone, load `docs/store/sample-backup.json` through Settings → Restore backup, and take
-  screenshots of Home, the Unpaid list, a customer page and Reports. No real customer
-  details.
+- `screenshots/01-home.png` … `04-settings.png`: four phone screenshots, 1080×1920 (9:16),
+  24-bit PNG. Raw phone captures live in `docs/store/screenshots/src/`; tall-phone captures
+  are 2.2:1, which Play rejects, so `python3 -I scripts/build-screenshots.py` places each one
+  on the brand background with a caption. Uploaded to the default listing on 18 Nov 2026.
 
 **Category:** Business. **Contact email:** `rehanch642@gmail.com`.
 **Privacy policy URL:** https://rehan-ch.github.io/fee-tracker/privacy-policy.html
@@ -198,7 +197,7 @@ the publisher; the app-side items are below.
 | Full description ≤ 4,000 | Done | 1,462 characters, no keyword stuffing; lists the payment-screenshot feature that release 7 ships. |
 | Icon 512×512, 32-bit PNG with alpha, ≤ 1 MB, no badges | Done | `docs/store/play-icon-512.png` (RGBA, 4 KB). |
 | Feature graphic 1024×500, no alpha | Done | `docs/store/feature-graphic-1024x500.png` (RGB, 16 KB). |
-| At least 2 phone screenshots | **To do** | The only listing item left. Take from the installed release 7 (see Graphics above); then submit the listing for review. |
+| At least 2 phone screenshots | Done | Four framed 1080×1920 screenshots in `docs/store/screenshots/`, uploaded to the listing. |
 | Support email | Done | `rehanch642@gmail.com`. |
 | Privacy policy: public web page, not a PDF, linked in the app | Done | https://rehan-ch.github.io/fee-tracker/privacy-policy.html; in-app under Settings → Privacy policy with a "Read online" button. |
 | Data safety form | Submitted: no collection | Payment-proof screenshots are stored only on the phone (private app storage, never uploaded, not in backups), so "collected" stays No. |
@@ -220,6 +219,6 @@ the publisher; the app-side items are below.
 | --- | --- |
 | App | Created, `com.feetracker.app`, Business category, contact email and website set |
 | App content | All 11 declarations actioned; content rating Everyone / PEGI 3; trader status "applies" with the terms URL |
-| Store listing | Text, icon and feature graphic saved as draft; screenshots missing, so not yet submitted for review (the store page shows a temporary name and no icon until it is) |
+| Store listing | Text, icon, feature graphic and 4 phone screenshots saved as draft; the review step still needs the AI asset declaration answered, then "Send for review" in Publishing overview (the store page shows a temporary name and no icon until it is approved) |
 | Internal testing | Release 7 (1.0.0) live for the "Internal testers" list; join link `https://play.google.com/apps/internaltest/4701635810876662094` |
 | Closed testing | Not started; needs 12+ testers for 14 days before production access can be requested |
