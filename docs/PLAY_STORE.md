@@ -219,6 +219,6 @@ the publisher; the app-side items are below.
 | --- | --- |
 | App | Created, `com.feetracker.app`, Business category, contact email and website set |
 | App content | All 11 declarations actioned; content rating Everyone / PEGI 3; trader status "applies" with the terms URL |
-| Store listing | Text, icon, feature graphic and 4 phone screenshots saved as draft; the review step still needs the AI asset declaration answered, then "Send for review" in Publishing overview (the store page shows a temporary name and no icon until it is approved) |
+| Store listing | Text, icon, feature graphic and 4 phone screenshots; AI asset declaration: icon and feature graphic labelled, screenshots not. Sent for review on 18 Nov 2026 together with the first closed-testing release (the store page shows a temporary name and no icon until approved) |
 | Internal testing | Release 7 (1.0.0) live for the "Internal testers" list; join link `https://play.google.com/apps/internaltest/4701635810876662094` |
-| Closed testing | Not started; needs 12+ testers for 14 days before production access can be requested |
+| Closed testing | Track "Alpha": release 7 (1.0.0), all 177 countries + rest of world, testers = "Internal testers" list, feedback email `rehanch642@gmail.com`. Sent for review 18 Nov 2026 with all 16 pending changes. After approval: add 12+ Gmail addresses to the list; the 14-day clock runs only while 12+ are opted in; then "Apply for production" on the dashboard |
